@@ -26,6 +26,7 @@ def reward_function(params):
     nextnext_pt = waypoints[(closest_waypoints[1] + 1) % len(waypoints)] # waypoint after next_pt
     
     # Find out whether track is straight or curved
+    # can use ** instead of pow
     car_next_dist = pow(pow(x_car - next_pt[0],2) + pow(y_car - next_pt[1],2),0.5)    
     prev_next_dist = pow(pow(prev_pt[0] - next_pt[0],2) + pow(prev_pt[1] - next_pt[1],2),0.5)    
     next_nextnext_dist = pow(pow((next_pt[0] - nextnext_pt[0],2) + pow(next_pt[1] - nextnext_pt[1],2),0.5)   
@@ -33,11 +34,11 @@ def reward_function(params):
     prev_nextnext_dist = pow(pow(prev_pt[0] - nextnext_pt[0],2) + pow(prev_pt[1] - nextnext_pt[1],2),0.5)
     
     # Calculate 3 marks that are farther and father away from the center line
-    marker_1 = 0.1 * track_width
-    marker_2 = 0.25 * track_width
-    marker_3 = 0.5 * track_width
+    marker_1 = 0.25 * track_width
+    marker_2 = 0.4 * track_width
+    marker_3 = 0.6 * track_width
     
-    # Steering penality threshold, change the number based on your action space setting
+    # Steering penality threshold, change the number based on your action space setting (how?)
     ABS_STEERING_THRESHOLD = 15
     
     if (prev_nextnext_dist/(prev_next_dist + next_nextnext_dist)) < .9:
@@ -61,8 +62,8 @@ def reward_function(params):
         #curved track
         
         # Penalize reward if the car is steering too much
-        if steering > ABS_STEERING_THRESHOLD:
-            reward *= 0.95  
+        #if steering > ABS_STEERING_THRESHOLD:
+        #    reward *= 0.95  
             
         # Give higher reward if the car is closer to center line and vice versa
         if distance_from_center <= marker_2:
