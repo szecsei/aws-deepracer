@@ -20,7 +20,7 @@ def reward_function(params):
     else:
         reward = .1 #default reward value
         
-    # Determine distance from nearest waypoint
+    # Determine waypoints
     prev_pt = waypoints[closest_waypoints[0]] # closest waypoint behind car
     next_pt = waypoints[closest_waypoints[1]] # closest waypoint ahead of car
     nextnext_pt = waypoints[(closest_waypoints[1] + 1) % len(waypoints)] # waypoint after next_pt
