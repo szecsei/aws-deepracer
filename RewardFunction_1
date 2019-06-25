@@ -2,11 +2,7 @@ def reward_function(params):
     '''
     Example of penalize steering, which helps mitigate zig-zag behaviors
     '''
-    
-    #find distance between coordinates (x1, y1) and (x2, y2)
-    def coord_distance(x1,x2,y1,y2):
-        return pow(pow(x1 - x2,2) + pow(y1 - y2,2),0.5)
-    
+   
     # Read input parameters
     x_car = params['x']
     y_car = params['y']
@@ -20,9 +16,9 @@ def reward_function(params):
     speed = params['speed']
     
     if all_wheels_on_track:
-        reward = 1
+        reward = 10
     else:
-        reward = 1e-3 #default reward value
+        reward = .1 #default reward value
         
     # Determine distance from nearest waypoint
     prev_pt = waypoints[closest_waypoints[0]] # closest waypoint behind car
@@ -30,11 +26,11 @@ def reward_function(params):
     nextnext_pt = waypoints[(closest_waypoints[1] + 1) % len(waypoints)] # waypoint after next_pt
     
     # Find out whether track is straight or curved
-    car_next_dist = coord_distance(x_car, next_pt[0], y_car, next_pt[1])
-    prev_next_dist = coord_distance(prev_pt[0], next_pt[0], prev_pt[1], next_pt[1]) 
-    next_nextnext_dist = coord_distance(next_pt[0], nextnext_pt[0], next_pt[1], nextnext_pt[1])
-    car_nextnext_dist = coord_distance(x_car, nextnext_pt[0], y_car, nextnext_pt[1])
-    prev_nextnext_dist = coord_distance(prev_pt[0], nextnext_pt[0], prev_pt[1], nextnext_pt[1])
+    car_next_dist = pow(pow(x_car - next_pt[0],2) + pow(y_car - next_pt[1],2),0.5)    
+    prev_next_dist = pow(pow(prev_pt[0] - next_pt[0],2) + pow(prev_pt[1] - next_pt[1],2),0.5)    
+    next_nextnext_dist = pow(pow((next_pt[0] - nextnext_pt[0],2) + pow(next_pt[1] - nextnext_pt[1],2),0.5)   
+    car_nextnext_dist = pow(pow(x_car - nextnext_pt[0],2) + pow(y_car - nextnext_pt[1],2),0.5)
+    prev_nextnext_dist = pow(pow(prev_pt[0] - nextnext_pt[0],2) + pow(prev_pt[1] - nextnext_pt[1],2),0.5)
     
     # Calculate 3 marks that are farther and father away from the center line
     marker_1 = 0.1 * track_width
