@@ -10,8 +10,8 @@ def reward_function(params):
     distance_from_center = params['distance_from_center']
     track_width = params['track_width']
     progress = params['progress']/100
-    #waypoints = params['waypoints']
-    #closest_waypoints = params['closest_waypoints']
+    waypoints = params['waypoints']
+    closest_waypoints = params['closest_waypoints']
     #steering = abs(params['steering_angle']) # Only need the absolute steering angle
     speed = params['speed']
     steps = params["steps"]
@@ -57,8 +57,11 @@ def reward_function(params):
     
     # Find out whether track is straight or curved
     if prev_nextnext_dist/(prev_next_dist + next_nextnext_dist) > .98:
-        if speed > 2:
-            #reward speed on straight track
-            reward += 3
+#         if speed > 4:
+#             #reward speed on straight track
+#             reward += 4
+#         elif speed >2:
+#             reward += 2
+        reward += speed
  
     return float(reward)
