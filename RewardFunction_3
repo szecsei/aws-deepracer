@@ -10,8 +10,8 @@ def reward_function(params):
     distance_from_center = params['distance_from_center']
     track_width = params['track_width']
     progress = params['progress']/100
-    #waypoints = params['waypoints']
-    #closest_waypoints = params['closest_waypoints']
+    waypoints = params['waypoints']
+    closest_waypoints = params['closest_waypoints']
     #steering = abs(params['steering_angle']) # Only need the absolute steering angle
     speed = params['speed']
     steps = params["steps"]
