@@ -95,19 +95,81 @@ def linearFunctions(start_x, start_y, stop_x, stop_y, n):
             return listOfPoints
 
 
-#def this function will parameterize the semi-circle                      
-def curve1(n):
+#def this function will parameterize the semi-circle given the starting and stopping
+#points, the angle (in degrees), and the number of intermediate points, n
+#this function uses the law of cosines: a^2 + b^2 - 2abcos(theta) = c^2
+#we calculate c^2 from the starting and stopping coordinates, and then determine
+#a using the formula
+def generalCurve(start_x, start_y, stop_x, stop_y, theta, n, center_below, sweep_clockwise,hack):
+            
+            #convert theta from degrees to radians
+            theta_radians = math.radians(theta)
+            
+            #determine a
+            #step 1: compute c using the distance formula
+            c = ((start_x - stop_x)**2 + (start_y - stop_y)**2)**0.5
+            
+            #i will also need the midpoint for later on in the calculation of the center
+            mid_x = (start_x + stop_x)/2
+            mid_y = (start_y + stop_y)/2
+            
+            #compute radius using the law of cosines:
+            radius = c / (2 * (1 - math.cos(theta_radians)))**.5
+            
+            if center_below == True:
+                        mySign = 1
+                        startAngle = 0
+            else:
+                        mySign = -1
+                        startAngle = math.pi
+            if hack == True:
+                        startAngle = theta_radians - math.pi
+                        
+            if sweep_clockwise == True:
+                        clockwiseSign = 1
+            else:
+                        clockwiseSign = -1
+            if hack == True:
+                        clockwiseSign = -1
+
+                        
+            
+            #determine the coordinates of the center of the circle
+            center_x = mid_x + mySign * ((radius**2 - (c/2)**2)**0.5) * (start_y - stop_y)/c
+            center_y = mid_y + mySign * ((radius**2 - (c/2)**2)**0.5) * (stop_x - start_x)/c
+            
+            print(radius, mid_x, mid_y, c, center_x, center_y)
+            
+            #next, determine the equation of the 
             listOfPoints = []
             counter = 0
+            
+            
+            sectorSize = theta_radians / n
             while counter <= n:
-                        newPoint = [.71 * math.sin(math.pi*(1 - counter / n)) + 5.51, .71 * math.cos(math.pi * (1 - counter / n)) + 1.29]
+
+                        newPoint = [radius * math.sin(startAngle + clockwiseSign * counter * sectorSize) + center_x, radius * math.cos(startAngle + clockwiseSign * counter * sectorSize) + center_y]
+
                         listOfPoints.append(newPoint)
                         counter = counter + 1
+            print(listOfPoints)
             return listOfPoints 
 
 def createCombinedPlot(n):
             points1 = createWaypoints()
-            points2 = curve1(n)
+            #generalCurve(start_x, start_y, stop_x, stop_y, theta, n, center_below, sweep_clockwise, hack):
+            curve1 = generalCurve(5.5, .58, 5.6, 2.0, 180, n, False, False, False)
+            curve2 = generalCurve(4.2, 2.02, 4, 2.1, 51, n, False, True, False)
+            curve3 = generalCurve(2.6, 3.92, 2.4, 4, 53, n, True, True, False)
+            curve4 = generalCurve(1.2, 3.95, .57, 3.2, 100, n, True, False, False)
+            curve5 = generalCurve(1, 1, 1.5, .58, 78, n, True, True, True)
+            
+            #linearFunctions(start_x, start_y, stop_x, stop_y, n):
+            straight1 = linearFunctions(1.5, .58, 5.5, .58, 12)
+            straight2 = linearFunctions(5.6, 2.0, 4.2, 2.02, 8)
+            straight3 = linearFunctions(4, 2.1, 2.6, 3.92, 12)
+            straight4 = linearFunctions(2.4, 4, 1.2, 3.95, 8)
+            straight5 = linearFunctions(.57, 3.2, 1, 1, 12)
+                        
+            points2 = curve1 + curve2 + curve3 + curve4 + curve5 + straight1 + straight2 + straight3 + straight4 + straight5
             createGraph(points1, points2)
-
-
